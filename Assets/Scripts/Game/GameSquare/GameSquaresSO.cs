@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.GameSquare
 {
-    [CreateAssetMenu(fileName = "GameSquare_", menuName = "ScriptableObject/GameSquare", order = 51)]
+    [CreateAssetMenu(fileName = "GameSquares", menuName = "ScriptableObject/GameSquare", order = 51)]
     public class GameSquaresSO : ScriptableObject
     {
         [SerializeField] List<GameSquare> squares = new();
