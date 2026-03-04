@@ -1,21 +1,13 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.GameSquare
 {
-    [CreateAssetMenu(fileName = "GameSquares", menuName = "ScriptableObject/GameSquare", order = 51)]
+    [CreateAssetMenu(fileName = "GameSquares", menuName = "ScriptableObject/GameSquare", order = 66)]
     public class GameSquaresSO : ScriptableObject
     {
-        [SerializeField] List<GameSquare> squares = new();
+        [SerializeField] private List<SquareData> squares = new();
         
-        public List<GameSquare> Squares => squares;
-    }
-
-    [Serializable]
-    public class GameSquare
-    {
-        public int Id;
-        public Color Color;
+        public List<SquareData> Squares => squares;
     }
 }

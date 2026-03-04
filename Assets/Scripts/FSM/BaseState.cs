@@ -3,7 +3,7 @@ using FSM.StateMachines;
 
 namespace FSM
 {
-    public abstract class BaseState
+    public abstract class BaseState : IState
     {
         public virtual Type StateMachineType { get; protected set; }
         protected BaseStateMachine StateMachine;

@@ -41,7 +41,7 @@ namespace Editor
             {
                 Undo.RecordObject(gameSquaresSo, "Add New Item");
                 var newIntId = gameSquaresSo.Squares.Count - 1;
-                var newItem = new GameSquare()
+                var newItem = new SquareData()
                 {
                     Id = newIntId + 1, // ID Generation
                     Color = new Color(Random.value, Random.value, Random.value, 1)

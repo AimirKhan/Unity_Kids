@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class SquareView : MonoBehaviour
+namespace Game.GameSquare
 {
-    // Start is called before the first frame update
-    void Start()
+    public class SquareView : MonoBehaviour
     {
+        [SerializeField] private Image image;
         
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void Init(Color color) => image.color = color;
     }
 }

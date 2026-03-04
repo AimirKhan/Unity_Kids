@@ -171,6 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36e45ffc6ecff746b331d7a56e404ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scrollRect: {fileID: 3089045856068358925}
+  squarePrefab: {fileID: 9143118692378757010, guid: 554b1187926276947a755e0adeeaace9, type: 3}
 --- !u!1 &6826711995519686958
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +208,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7971460201670675618
 MonoBehaviour:
