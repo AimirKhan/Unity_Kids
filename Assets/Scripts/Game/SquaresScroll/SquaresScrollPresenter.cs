@@ -1,6 +1,10 @@
 using System.Collections.Generic;
+using System.Reflection.Emit;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Game.GameSquare;
 using Reflex.Attributes;
+using Reflex.Core;
 using UnityEngine;
 
 namespace Game.SquaresScroll
@@ -8,25 +12,36 @@ namespace Game.SquaresScroll
     public class SquaresScrollPresenter
     {
         [Inject] GameSquaresSO gameSquaresSO;
-        private SquaresScrollModel model;
-        private SquaresScrollView view;
-        private readonly List<SquarePresenter> squares = new();
+        private readonly Container container;
+        private readonly SquaresScrollModel model;
+        private readonly SquaresScrollView view;
+        private readonly List<SquarePresenter> activeSquarePresenters = new();
         
-        public SquaresScrollPresenter(SquaresScrollModel model, SquaresScrollView view)
+        public SquaresScrollPresenter(Container container, SquaresScrollModel model, SquaresScrollView view)
         {
+            this.container = container;
             this.model = model;
             this.view = view;
         }
         
-        public void InitializeElements()
+        public async UniTask InitializeElements(CancellationToken token)
         {
-            foreach (var squareData in gameSquaresSO.Squares)
+            var squaresData = gameSquaresSO.Squares;
+            var squaresCount = squaresData.Count;
+            var squareViews = await Object
+                .InstantiateAsync(view.SquarePrefab, squaresCount, view.ScrollRect.content)
+                .ToUniTask(cancellationToken: token);
+
+            for (var i = 0; i < squareViews.Length; i++)
             {
-                var squareModel = new SquareModel(squareData);
-                var squareView = Object.Instantiate(view.SquarePrefab, view.ScrollRect.content);
-                var squarePresenter = new SquarePresenter(squareModel, squareView);
+                var squareView = squareViews[i];
+                var squareData = squaresData[i];
                 
-                squares.Add(squarePresenter);
+                var squareModel = new SquareModel(squareData);
+                
+                var squarePresenter = new SquarePresenter(squareModel, squareView);
+
+                activeSquarePresenters.Add(squarePresenter);
             }
         }
     }

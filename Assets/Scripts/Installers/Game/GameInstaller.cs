@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using FSM;
 using FSM.StateMachines;
 using FSM.States;
@@ -23,6 +24,8 @@ namespace Installers.Game
             RegisterConfigs(containerBuilder);
             RegisterGameStates(containerBuilder);
             RegisterObjects(containerBuilder);
+            
+            containerBuilder.RegisterValue(this.GetCancellationTokenOnDestroy());
         }
         
         private void RegisterConfigs(ContainerBuilder builder)
@@ -30,6 +33,7 @@ namespace Installers.Game
             builder.RegisterValue(gameConfig);
 
             builder.RegisterValue(gameConfig.GameSquaresSO);
+
         }
         
         private void RegisterGameStates(ContainerBuilder builder)
