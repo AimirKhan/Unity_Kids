@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Game.GameSquare;
 using Reflex.Attributes;
 using Reflex.Core;
+using Services;
 using UnityEngine;
 
 namespace Game.SquaresScroll
@@ -39,7 +40,8 @@ namespace Game.SquaresScroll
                 
                 var squareModel = new SquareModel(squareData);
                 
-                var squarePresenter = new SquarePresenter(squareModel, squareView);
+                var squarePresenter = new SquarePresenter(squareModel, squareView,
+                    container.Resolve<DragService>());
 
                 activeSquarePresenters.Add(squarePresenter);
             }

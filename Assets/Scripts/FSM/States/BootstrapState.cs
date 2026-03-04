@@ -11,8 +11,8 @@ namespace FSM.States
     {
         [Inject]
         private readonly SquaresScrollPresenter squaresScrollPresenter;
-
-        [Inject] private readonly CancellationToken ct;
+        [Inject]
+        private readonly CancellationToken ct;
         
         public override void Enter()
         {

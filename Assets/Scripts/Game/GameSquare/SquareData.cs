@@ -8,5 +8,6 @@ namespace Game.GameSquare
     {
         public int Id;
         public Color Color;
+        public float OffsetX;
     }
 }
