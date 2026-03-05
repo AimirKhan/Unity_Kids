@@ -1,7 +1,9 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Level;
 using Game.SquaresScroll;
+using Game.Tower;
 using Reflex.Attributes;
 using UnityEngine;
 
@@ -12,12 +14,15 @@ namespace FSM.States
         [Inject]
         private readonly SquaresScrollPresenter squaresScrollPresenter;
         [Inject]
+        private readonly DragIconPresenter dragIconPresenter;
+        [Inject]
+        private readonly TowerPresenter towerPresenter;
+        [Inject]
         private readonly CancellationToken ct;
         
         public override void Enter()
         {
             Debug.Log("System: Initializing resources...");
-            
             InitSequence().Forget();
         }
 

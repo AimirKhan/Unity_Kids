@@ -6,6 +6,7 @@ namespace FSM.StateMachines
     {
         public void Initialize()
         {
+            
             ChangeState<BootstrapState>();
         }
     }

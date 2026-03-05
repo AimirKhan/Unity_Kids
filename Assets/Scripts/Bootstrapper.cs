@@ -13,7 +13,7 @@ public class Bootstrapper : MonoBehaviour
 
     private void Update()
     {
-        gameplaySM.CurrentState?.OnUpdate();
+        //gameplaySM.CurrentState?.OnUpdate();
     }
     
     [ContextMenu("Check Current State")]

@@ -22,5 +22,13 @@ namespace Game.Tower
                 Squares.RemoveAt(Squares.Count - 1);
             }
         }
+
+        public void RemoveAt(int index)
+        {
+            if (index >= 0 && index < Squares.Count)
+            {
+                Squares.RemoveAt(index);
+            }
+        }
     }
 }

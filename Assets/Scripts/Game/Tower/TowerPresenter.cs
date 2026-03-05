@@ -1,5 +1,7 @@
 using System;
+using Game.GameSquare;
 using R3;
+using Services;
 using UnityEngine;
 
 namespace Game.Tower
@@ -8,42 +10,73 @@ namespace Game.Tower
     {
         private readonly TowerModel model;
         private readonly TowerView view;
+        private readonly DragService dragService;
+        private Camera mainCamera;
         private DisposableBag bag = new();
 
-        public TowerPresenter(TowerModel towerModel, TowerView towerView)
+        public TowerPresenter(TowerModel towerModel, TowerView towerView, DragService dragService, Camera camera)
         {
             model = towerModel;
             view = towerView;
+            this.dragService = dragService;
+            mainCamera = camera;
             
             model.Squares.OnAdd.Subscribe(squareData =>
             {
-                view.SpawnSquare(squareData.Color, squareData.OffsetX);
+                var newSquareView = view.SpawnSquare(squareData.Color, squareData.OffsetX);
+                var currentIndex = model.Squares.Count - 1;
+                
+                OnSquareCreated(newSquareView, currentIndex);
             }).AddTo(ref bag);
 
-            model.Squares.OnRemove.Subscribe(_ =>
+            model.Squares.OnRemove.Subscribe(index =>
             {
-                view.RemoveTopAndShiftDown();
+                view.RemoveAtAndShift(index);
+                // messageService.Send("hole");
             }).AddTo(ref bag);
         }
 
-        // Check on hit tower
         public bool IsHit(Vector2 screenPoint)
         {
             // If Tower is empty - can place cube everywhere
             if (model.Squares.Count == 0)
-                return screenPoint.x > Screen.width / 2;
+                return screenPoint.x > Screen.width * .5f;
 
-            // Else - check player hit on top cube
-            return true;
+            var topSquareRect = view.GetTopSquareRect();
+            
+            if (topSquareRect == null) return false;
+            
+            return RectTransformUtility.RectangleContainsScreenPoint(topSquareRect, screenPoint, mainCamera);
         }
         
-        public bool IsScreenFull(float squareHeight)
+        public bool IsScreenFull()
         {
-            var towerHeight = model.Squares.Count * squareHeight;
+            var maxAllowedHeight = view.GetViewRectSize().y;
+            var squareHeight = view.GetSquareHeight();
             
-            return towerHeight >= Screen.height * .8f;
+            var currentTowerHeight = model.Squares.Count * squareHeight;
+            
+            return currentTowerHeight + squareHeight > maxAllowedHeight;
         }
 
+        public void OnSquareCreated(SquareView squareView, int index)
+        {
+            squareView.OnBeginDragStream.Subscribe(ed =>
+            {
+                dragService.OnBeginDrag.OnNext((squareView.Image.color, ed, index));
+            }).AddTo(ref bag);
+            
+            squareView.OnDragStream.Subscribe(ed =>
+            {
+                dragService.OnDrag.OnNext((ed, index));
+            }).AddTo(ref bag);
+            
+            squareView.OnEndDragStream.Subscribe(ed =>
+            {
+                dragService.OnEndDrag.OnNext((ed, index));
+            }).AddTo(ref bag);
+        }
+        
         public void Dispose() => bag.Dispose();
     }
 }

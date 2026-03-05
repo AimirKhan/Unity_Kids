@@ -2,8 +2,8 @@ using Cysharp.Threading.Tasks;
 using FSM;
 using FSM.StateMachines;
 using FSM.States;
-using Game.GameSquare;
 using Game.Hole;
+using Game.Level;
 using Game.SquaresScroll;
 using Game.Tower;
 using GameConfig;
@@ -30,7 +30,6 @@ namespace Installers.Game
             RegisterObjects(containerBuilder);
             RegisterFactories(containerBuilder);
 
-            containerBuilder.RegisterValue(new DragService());
             containerBuilder.RegisterValue(this.GetCancellationTokenOnDestroy());
         }
         
@@ -38,7 +37,6 @@ namespace Installers.Game
         {
             builder.RegisterValue(gameConfig);
             builder.RegisterValue(gameConfig.GameSquaresSO);
-
         }
         
         private void RegisterGameStates(ContainerBuilder builder)
@@ -61,13 +59,20 @@ namespace Installers.Game
 
         private void RegisterObjects(ContainerBuilder builder)
         {
+            // Register squares scroll panel bindings
             builder.RegisterType(typeof(SquaresScrollModel), Lifetime.Singleton, Resolution.Lazy);
             builder.RegisterType(typeof(SquaresScrollPresenter), Lifetime.Singleton, Resolution.Lazy);
             
-            builder.RegisterValue(typeof(HolePresenter));
+            // Register hole bindings
+            builder.RegisterType(typeof(HolePresenter), Lifetime.Singleton, Resolution.Lazy);
             
-            builder.RegisterValue(typeof(TowerModel));
-            builder.RegisterValue(typeof(TowerPresenter));
+            // Register tower bindings
+            builder.RegisterType(typeof(TowerModel), Lifetime.Singleton, Resolution.Lazy);
+            builder.RegisterType(typeof(TowerPresenter), Lifetime.Singleton, Resolution.Lazy);
+            
+            // Register drag system bindings
+            builder.RegisterValue(new DragService());
+            builder.RegisterType(typeof(DragIconPresenter), Lifetime.Singleton, Resolution.Lazy);
         }
 
         private void RegisterFactories(ContainerBuilder builder)

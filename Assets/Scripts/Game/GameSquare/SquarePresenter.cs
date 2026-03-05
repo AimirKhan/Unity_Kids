@@ -1,8 +1,6 @@
 using System;
 using R3;
-using Reflex.Attributes;
 using Services;
-using UnityEngine;
 
 namespace Game.GameSquare
 {
@@ -13,18 +11,22 @@ namespace Game.GameSquare
         private readonly DragService dragService;
         private readonly DisposableBag bag = new();
         
-        public SquarePresenter(SquareModel model, SquareView view, DragService dragService)
+        public SquarePresenter(SquareModel squareModel, SquareView squareView, DragService draggingService)
         {
-            this.model = model;
-            this.view = view;
-            this.dragService = dragService;
+            model = squareModel;
+            view = squareView;
+            dragService = draggingService;
             
-            view.Init(model.Color);
+            squareView.Init(squareModel.Color);
             
-            view.OnBeginDragStream.Subscribe(ed =>
-                dragService.OnBeginDrag.OnNext((view.Image.color, ed))).AddTo(ref bag);
-            view.OnDragStream.Subscribe(ed => dragService.OnDrag.OnNext(ed)).AddTo(ref bag);
-            view.OnDragStream.Subscribe(ed => dragService.OnEndDrag.OnNext(ed)).AddTo(ref bag);
+            squareView.OnBeginDragStream.Subscribe(eventData => draggingService.OnBeginDrag
+                    .OnNext((squareView.Image.color,eventData, squareModel.Id))).AddTo(ref bag);
+            
+            squareView.OnDragStream.Subscribe(eventData => draggingService.OnDrag
+                .OnNext((eventData, null))).AddTo(ref bag);
+            
+            squareView.OnEndDragStream.Subscribe(eventData => draggingService.OnEndDrag
+                .OnNext((eventData, null))).AddTo(ref bag);
         }
         
         public void Dispose() => bag.Dispose();
