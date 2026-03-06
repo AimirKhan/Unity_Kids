@@ -1,4 +1,6 @@
+using System;
 using Game.GameSquare;
+using Localization;
 using UnityEngine;
 
 namespace GameConfig
@@ -7,5 +9,6 @@ namespace GameConfig
     public class GameConfigSO : ScriptableObject
     {
         public GameSquaresSO GameSquaresSO;
+        public LocalizationConfig LocalizationConfig;
     }
 }

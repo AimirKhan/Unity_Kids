@@ -7,9 +7,11 @@ using Game.Level;
 using Game.SquaresScroll;
 using Game.Tower;
 using GameConfig;
+using Localization;
 using Reflex.Core;
 using Reflex.Enums;
 using Services;
+using Services.MessageService;
 using UnityEngine;
 using Resolution = Reflex.Enums.Resolution;
 
@@ -28,7 +30,7 @@ namespace Installers.Game
             RegisterConfigs(containerBuilder);
             RegisterGameStates(containerBuilder);
             RegisterObjects(containerBuilder);
-            RegisterFactories(containerBuilder);
+            RegisterServices(containerBuilder);
 
             containerBuilder.RegisterValue(this.GetCancellationTokenOnDestroy());
         }
@@ -37,6 +39,7 @@ namespace Installers.Game
         {
             builder.RegisterValue(gameConfig);
             builder.RegisterValue(gameConfig.GameSquaresSO);
+            builder.RegisterValue(gameConfig.LocalizationConfig);
         }
         
         private void RegisterGameStates(ContainerBuilder builder)
@@ -75,9 +78,10 @@ namespace Installers.Game
             builder.RegisterType(typeof(DragIconPresenter), Lifetime.Singleton, Resolution.Lazy);
         }
 
-        private void RegisterFactories(ContainerBuilder builder)
+        private void RegisterServices(ContainerBuilder builder)
         {
-            
+            builder.RegisterType(typeof(LocalizationService), Lifetime.Singleton, Resolution.Lazy);
+            builder.RegisterType(typeof(MessageService), Lifetime.Singleton, Resolution.Lazy);
         }
     }
 }

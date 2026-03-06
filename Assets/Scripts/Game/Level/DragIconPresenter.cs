@@ -5,6 +5,7 @@ using Game.Tower;
 using R3;
 using Reflex.Attributes;
 using Services;
+using Services.MessageService;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,6 +15,8 @@ namespace Game.Level
     {
         [Inject]
         private Camera mainCamera;
+
+        [Inject] private MessageService messageService;
         private readonly DragService dragService;
         private readonly DragIconView view;
         private readonly HoleView holeView;
@@ -67,7 +70,7 @@ namespace Game.Level
                 {
                     // Square from tower
                     towerModel.RemoveAt(dragData.Index.Value);
-                    // messageService.Send("hole")
+                    messageService.Send("hole");
                 }
                 view.Deactivate(true);
                 return;
@@ -86,7 +89,7 @@ namespace Game.Level
                 {
                     if (towerPresenter.IsScreenFull())
                     {
-                        // messageService.Send("limit");
+                        messageService.Send("limit");
                         view.Deactivate(false);
                         return;
                     }
@@ -95,7 +98,7 @@ namespace Game.Level
                         (view.GetSquareSize().x / 2) - towerView.TowerRectOffset.x < Mathf.Abs(localPoint.x);
                     if (horizontalPos)
                     {
-                        // messageService.Send("limit");
+                        messageService.Send("limit");
                         view.Deactivate(false);
                         return;
                     }
@@ -113,7 +116,7 @@ namespace Game.Level
                     }
                     towerModel.TryAddCube(dragData.Color, targetX);
                     view.Deactivate(true);
-                    // messageService.Send("hit");
+                    messageService.Send("hit");
                 }
                 else
                 {
@@ -124,7 +127,7 @@ namespace Game.Level
             else
             {
                 view.Deactivate(false);
-                // messageService.Send("miss");
+                messageService.Send("miss");
             }
         }
 

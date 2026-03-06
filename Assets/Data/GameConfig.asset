@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   GameSquaresSO: {fileID: 11400000, guid: b0c03734c24be4147b8a95e1af66d71b, type: 2}
+  LocalizationConfig: {fileID: 11400000, guid: 2199f47976d2d8543ade1878126cac14, type: 2}

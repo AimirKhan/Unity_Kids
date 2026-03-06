@@ -3,6 +3,7 @@ using Game.Level;
 using Game.SquaresScroll;
 using Game.Tower;
 using Reflex.Core;
+using Services.MessageService;
 using UnityEngine;
 using UnityEngine.InputSystem.UI;
 
@@ -16,6 +17,7 @@ namespace Installers.Game
         [SerializeField] private TowerView towerView;
         [SerializeField] private HoleView holeView;
         [SerializeField] private InputSystemUIInputModule uiModule;
+        [SerializeField] private MessageView messageView;
         
         public void RegisterMonoObjects(ContainerBuilder builder)
         {
@@ -30,6 +32,9 @@ namespace Installers.Game
             
             // Register Input Action Map
             builder.RegisterValue(uiModule.actionsAsset);
+            
+            // Register Services
+            builder.RegisterValue(messageView);
         }
     }
 }
