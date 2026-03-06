@@ -31,8 +31,6 @@ namespace Game.Tower
             // Start point for anim "arrival"
             var targetPosition = new Vector2(xPosition,
                 yPosition + (container.rect.position.y / 2) - squareRect.y);
-            Debug.Log("Square target position: " + targetPosition + " source position: " + yPosition);
-            Debug.Log("Tower container value: " + container.rect.position);
             squareRT.anchoredPosition = new Vector2(xPosition, yPosition + 500f);
             squareRT.localScale = Vector3.zero;
             

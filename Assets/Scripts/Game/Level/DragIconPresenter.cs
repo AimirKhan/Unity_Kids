@@ -60,12 +60,12 @@ namespace Game.Level
         private async UniTask HandleDrop(DragEventData dragData)
         {
             var color = view.CurrentColor;
+            Debug.Log($"[DragIconPresenter]: HandleDrop: view.CurrentColor: {color} DragData color: {dragData.Color}");
             
             // 1. Hole check drop
             if (holePresenter.IsInside(dragData.EventData.position))
             {
                 await view.PlayAbsorbAnimation(holeView.Rect);
-                view.Deactivate(true);
                 
                 if (dragData.Index.HasValue)
                 {
@@ -73,6 +73,7 @@ namespace Game.Level
                     towerModel.RemoveAt(dragData.Index.Value);
                     // messageService.Send("hole")
                 }
+                view.Deactivate(true);
                 return;
             }
             
@@ -81,27 +82,58 @@ namespace Game.Level
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     towerView.Container, dragData.EventData.position, mainCamera, out var localPoint);
 
-                float targetX;
-                if (towerModel.Squares.Count == 0)
+                // Square from scroll panel
+                if (!dragData.Index.HasValue)
                 {
-                    targetX = localPoint.x;
+                    if (towerPresenter.IsScreenFull())
+                    {
+                        // messageService.Send("limit");
+                        view.Deactivate(false);
+                        return;
+                    }
+                    
+                    float targetX;
+                    if (towerModel.Squares.Count == 0)
+                    {
+                        targetX = localPoint.x;
+                    }
+                    else
+                    {
+                        var randomOffset = Random.Range(-0.25f, 0.25f) *
+                                           towerView.GetTopSquareRect().rect.width;
+                        targetX = towerView.GetTopSquareRect().anchoredPosition.x + randomOffset;
+                    }
+                    towerModel.TryAddCube(color, targetX);
+                    view.Deactivate(true);
+                    // messageService.Send("hit");
                 }
                 else
                 {
-                    var randomOffset = Random.Range(-0.25f, 0.25f) *
-                                       towerView.GetTopSquareRect().rect.width;
-                    targetX = towerView.GetTopSquareRect().anchoredPosition.x + randomOffset;
+                    //Square from tower
+                    view.Deactivate(false);
                 }
                 
-                if (towerPresenter.IsScreenFull())
-                {
-                    // messageService.Send("limit");
-                    view.Deactivate(false);
-                    return;
-                }
-                towerModel.TryAddCube(color, targetX);
-                view.Deactivate(true);
-                // messageService.Send("hit");
+                // float targetX;
+                // if (towerModel.Squares.Count == 0)
+                // {
+                //     targetX = localPoint.x;
+                // }
+                // else
+                // {
+                //     var randomOffset = Random.Range(-0.25f, 0.25f) *
+                //                        towerView.GetTopSquareRect().rect.width;
+                //     targetX = towerView.GetTopSquareRect().anchoredPosition.x + randomOffset;
+                // }
+                //
+                // if (towerPresenter.IsScreenFull())
+                // {
+                //     // messageService.Send("limit");
+                //     view.Deactivate(false);
+                //     return;
+                // }
+                // towerModel.TryAddCube(color, targetX);
+                // view.Deactivate(true);
+                // // messageService.Send("hit");
             }
             else
             {
