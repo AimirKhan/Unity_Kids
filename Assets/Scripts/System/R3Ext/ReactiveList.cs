@@ -5,33 +5,38 @@ namespace System.R3Ext
 {
     public class ReactiveList<T>
     {
-        private readonly List<T> _list = new();
+        private readonly List<T> list = new();
     
         // Event streams
-        private readonly Subject<T> _onAdd = new();
-        private readonly Subject<int> _onRemove = new();
+        private readonly Subject<T> onAdd = new();
+        private readonly Subject<int> onRemove = new();
 
-        public Observable<T> OnAdd => _onAdd;
-        public Observable<int> OnRemove => _onRemove;
+        public Observable<T> OnAdd => onAdd;
+        public Observable<int> OnRemove => onRemove;
 
-        public int Count => _list.Count;
-        public T this[int index] => _list[index];
+        public int Count => list.Count;
+        public T this[int index] => list[index];
 
         public void Add(T item)
         {
-            _list.Add(item);
-            _onAdd.OnNext(item);
+            list.Add(item);
+            onAdd.OnNext(item);
         }
 
         public void RemoveAt(int index)
         {
-            if (index >= 0 && index < _list.Count)
+            if (index >= 0 && index < list.Count)
             {
-                _list.RemoveAt(index);
-                _onRemove.OnNext(index);
+                list.RemoveAt(index);
+                onRemove.OnNext(index);
             }
         }
 
-        public T Last() => _list[_list.Count - 1];
+        public List<T> ToList()
+        {
+            return new List<T>(list);
+        }
+        
+        public T Last() => list[list.Count - 1];
     }
 }

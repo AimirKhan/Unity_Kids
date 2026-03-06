@@ -16,6 +16,8 @@ namespace FSM.States
         [Inject]
         private readonly DragIconPresenter dragIconPresenter;
         [Inject]
+        private readonly TowerModel towerModel;
+        [Inject]
         private readonly TowerPresenter towerPresenter;
         [Inject]
         private readonly CancellationToken ct;
@@ -31,6 +33,7 @@ namespace FSM.States
             try
             {
                 await squaresScrollPresenter.InitializeElements(ct);
+                towerModel.LoadData();
                 StateMachine.ChangeState<StartState>();
             }
             catch (OperationCanceledException)

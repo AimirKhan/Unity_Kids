@@ -7,8 +7,6 @@ using R3;
 using Reflex.Attributes;
 using Reflex.Core;
 using Services;
-using UnityEngine.EventSystems;
-using Utils;
 using Object = UnityEngine.Object;
 
 namespace Game.SquaresScroll
