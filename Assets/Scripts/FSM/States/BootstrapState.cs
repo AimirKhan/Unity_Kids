@@ -1,0 +1,54 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Game.Level;
+using Game.SquaresScroll;
+using Game.Tower;
+using Reflex.Attributes;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace FSM.States
+{
+    public class BootstrapState : GameplayStates
+    {
+        [Inject]
+        private readonly SquaresScrollPresenter squaresScrollPresenter;
+        [Inject]
+        private readonly DragIconPresenter dragIconPresenter;
+        [Inject]
+        private readonly TowerModel towerModel;
+        [Inject]
+        private readonly TowerPresenter towerPresenter;
+        [Inject]
+        private readonly InputActionAsset inputActions;
+        [Inject]
+        private readonly CancellationToken ct;
+        
+        public override void Enter()
+        {
+            Debug.Log("System: Initializing resources...");
+            inputActions.Disable();
+            InitSequence().Forget();
+        }
+
+        private async UniTaskVoid InitSequence()
+        {
+            try
+            {
+                await squaresScrollPresenter.InitializeElements(ct);
+                towerModel.LoadData();
+                StateMachine.ChangeState<StartState>();
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.Log("System: Initializing was canceled.");
+            }
+        }
+        
+        public override void Exit()
+        {
+            
+        }
+    }
+}
