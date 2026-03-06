@@ -9,6 +9,9 @@ namespace Game.Tower
     {
         [SerializeField] private RectTransform container;
         [SerializeField] private SquareView squarePrefab;
+        [SerializeField] private Vector2 towerRectOffset = Vector2.one * 50;
+        
+        public Vector2 TowerRectOffset => towerRectOffset;
         
         public RectTransform Container => container;
         

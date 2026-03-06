@@ -58,5 +58,10 @@ namespace Game.Level
             gameObject.SetActive(false);
             image.color = startColor;
         }
+
+        public Vector2 GetSquareSize()
+        {
+            return image.rectTransform.rect.size;
+        }
     }
 }

@@ -38,13 +38,15 @@ namespace Game.Tower
 
         public bool IsHit(Vector2 screenPoint)
         {
-            // If Tower is empty - can place cube everywhere
-            if (model.Squares.Count == 0)
-                return screenPoint.x > Screen.width * .5f;
+            var towerRect = view.Container;
+            
+            var isInsideTowerArea = RectTransformUtility
+                .RectangleContainsScreenPoint(towerRect, screenPoint, mainCamera);
+            
+            if (!isInsideTowerArea) return false;
+            if (model.Squares.Count == 0) return true;
 
             var topSquareRect = view.GetTopSquareRect();
-            
-            if (topSquareRect == null) return false;
             
             return RectTransformUtility.RectangleContainsScreenPoint(topSquareRect, screenPoint, mainCamera);
         }
@@ -58,7 +60,7 @@ namespace Game.Tower
             
             return currentTowerHeight + squareHeight > maxAllowedHeight;
         }
-
+        
         public void OnSquareCreated(SquareView squareView, int index)
         {
             squareView.OnBeginDragStream.Subscribe(ed =>

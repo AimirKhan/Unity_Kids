@@ -91,6 +91,15 @@ namespace Game.Level
                         return;
                     }
                     
+                    var horizontalPos = (towerView.Container.rect.width / 2) -
+                        (view.GetSquareSize().x / 2) - towerView.TowerRectOffset.x < Mathf.Abs(localPoint.x);
+                    if (horizontalPos)
+                    {
+                        // messageService.Send("limit");
+                        view.Deactivate(false);
+                        return;
+                    }
+                    
                     float targetX;
                     if (towerModel.Squares.Count == 0)
                     {

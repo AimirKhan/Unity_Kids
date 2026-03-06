@@ -87,6 +87,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   container: {fileID: 8306509193826677615}
   squarePrefab: {fileID: 9143118692378757010, guid: 554b1187926276947a755e0adeeaace9, type: 3}
+  towerRectOffset: {x: 30, y: 0}
 --- !u!1001 &8298293173831713276
 PrefabInstance:
   m_ObjectHideFlags: 0
