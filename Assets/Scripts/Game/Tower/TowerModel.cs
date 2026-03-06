@@ -28,6 +28,7 @@ namespace Game.Tower
             if (index >= 0 && index < Squares.Count)
             {
                 Squares.RemoveAt(index);
+                Debug.Log($"[TowerModel] Removing square index {index} squares list size {Squares.Count}");
             }
         }
     }

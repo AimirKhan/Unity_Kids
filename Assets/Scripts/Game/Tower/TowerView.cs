@@ -59,12 +59,14 @@ namespace Game.Tower
             return squarePrefab.GetRectTransform().rect.height;
         }
         
+        public int GetSquareIndex(SquareView square) => activeSquares.IndexOf(square);
+        
         public void RemoveAtAndShift(int index)
         {
             var squareToRemove = activeSquares[index];
             activeSquares.RemoveAt(index);
             
-            Destroy(squareToRemove.gameObject);
+            Destroy(squareToRemove.gameObject); //TODO Need to replace
 
             for (int i = 0; i < activeSquares.Count; i++)
             {

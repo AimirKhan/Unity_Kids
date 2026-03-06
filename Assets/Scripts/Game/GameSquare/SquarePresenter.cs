@@ -20,13 +20,26 @@ namespace Game.GameSquare
             squareView.Init(squareModel.Color);
             
             squareView.OnBeginDragStream.Subscribe(eventData => draggingService.OnBeginDrag
-                    .OnNext((squareView.Image.color,eventData, squareModel.Id))).AddTo(ref bag);
+                .OnNext(new DragEventData
+                {
+                    Color = squareView.Image.color,
+                    EventData = eventData,
+                    Index = squareModel.Id
+                })).AddTo(ref bag);
             
             squareView.OnDragStream.Subscribe(eventData => draggingService.OnDrag
-                .OnNext((eventData, null))).AddTo(ref bag);
+                .OnNext(new DragEventData
+                {
+                    Color = squareView.Image.color,
+                    EventData = eventData
+                })).AddTo(ref bag);
             
             squareView.OnEndDragStream.Subscribe(eventData => draggingService.OnEndDrag
-                .OnNext((eventData, null))).AddTo(ref bag);
+                .OnNext(new DragEventData
+                {
+                    Color = squareView.Image.color,
+                    EventData = eventData
+                })).AddTo(ref bag);
         }
         
         public void Dispose() => bag.Dispose();

@@ -45,13 +45,12 @@ namespace Game.Level
             Debug.Log("DragIconView: Deactivated");
         }
 
-        public async UniTask PlayAbsorbAnimation(Transform holeTarget)
+        public async UniTask PlayAbsorbAnimation(RectTransform holeTarget)
         {
-            var localTarget = image.rectTransform.parent.InverseTransformPoint(holeTarget.position);
             var startColor = image.color;
             var sequence = DOTween.Sequence();
-            sequence.Join(image.rectTransform.DOAnchorPos(localTarget, 0.25f).SetEase(Ease.InBack));
-            //sequence.Join(transform.DOScale(0, 0.25f).SetEase(Ease.InBack));
+            sequence.Join(image.rectTransform.DOMove(holeTarget.position, 0.25f).SetEase(Ease.InBack));
+            sequence.Join(transform.DOScale(0, 0.25f).SetEase(Ease.InBack));
             sequence.Join(image.DOFade(0, 0.2f));
             
             await sequence.Play().ToUniTask();

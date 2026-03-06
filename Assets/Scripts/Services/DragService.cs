@@ -6,8 +6,15 @@ namespace Services
 {
     public class DragService
     {
-        public readonly Subject<(Color color, PointerEventData, int index)> OnBeginDrag = new();
-        public readonly Subject<(PointerEventData, int? index)> OnDrag = new();
-        public readonly Subject<(PointerEventData, int? index)> OnEndDrag = new();
+        public readonly Subject<DragEventData> OnBeginDrag = new();
+        public readonly Subject<DragEventData> OnDrag = new();
+        public readonly Subject<DragEventData> OnEndDrag = new();
+    }
+
+    public struct DragEventData
+    {
+        public Color Color;
+        public PointerEventData EventData;
+        public int? Index;
     }
 }

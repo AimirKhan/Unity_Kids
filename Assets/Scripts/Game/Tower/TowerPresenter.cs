@@ -63,17 +63,36 @@ namespace Game.Tower
         {
             squareView.OnBeginDragStream.Subscribe(ed =>
             {
-                dragService.OnBeginDrag.OnNext((squareView.Image.color, ed, index));
+                var currentIndex = view.GetSquareIndex(squareView);
+                
+                dragService.OnBeginDrag.OnNext(new DragEventData
+                {
+                    Color = squareView.Image.color,
+                    EventData = ed,
+                    Index = currentIndex
+                });
             }).AddTo(ref bag);
             
             squareView.OnDragStream.Subscribe(ed =>
             {
-                dragService.OnDrag.OnNext((ed, index));
+                var currentIndex = view.GetSquareIndex(squareView);
+                dragService.OnDrag.OnNext(new DragEventData
+                {
+                    Color = squareView.Image.color,
+                    EventData = ed,
+                    Index = currentIndex
+                });
             }).AddTo(ref bag);
             
             squareView.OnEndDragStream.Subscribe(ed =>
             {
-                dragService.OnEndDrag.OnNext((ed, index));
+                var currentIndex = view.GetSquareIndex(squareView);
+                dragService.OnEndDrag.OnNext(new DragEventData
+                {
+                    Color = squareView.Image.color,
+                    EventData = ed,
+                    Index = currentIndex
+                });
             }).AddTo(ref bag);
         }
         

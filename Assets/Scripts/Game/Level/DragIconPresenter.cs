@@ -41,45 +41,45 @@ namespace Game.Level
             this.towerPresenter = towerPresenter;
 
             dragService.OnBeginDrag.Subscribe(x =>
-                view.Activate(x.color, x.Item2.position)).AddTo(ref bag);
+                view.Activate(x.Color, x.EventData.position)).AddTo(ref bag);
             
             dragService.OnDrag.Subscribe(x =>
-                view.MoveTo(x.Item1.position)).AddTo(ref bag);
+                view.MoveTo(x.EventData.position)).AddTo(ref bag);
                 
             // dragService.OnEndDrag.Subscribe(x =>
             //     HandleDrop(x.Item1, x.index).Forget()).AddTo(ref bag);
 
             dragService.OnEndDrag.SubscribeAwait(async (x, ct) =>
             {
-                await HandleDrop(x.Item1, x.index);
+                await HandleDrop(x);
             }, AwaitOperation.Drop).AddTo(ref bag);
             
             Debug.Log("[DragIconPresenter]: Initialized");
         }
 
-        private async UniTask HandleDrop(PointerEventData ed, int? towerIndex)
+        private async UniTask HandleDrop(DragEventData dragData)
         {
             var color = view.CurrentColor;
-
+            
             // 1. Hole check drop
-            if (holePresenter.IsInside(ed.position))
+            if (holePresenter.IsInside(dragData.EventData.position))
             {
-                await view.PlayAbsorbAnimation(holeView.transform);
+                await view.PlayAbsorbAnimation(holeView.Rect);
                 view.Deactivate(true);
                 
-                if (towerIndex.HasValue)
+                if (dragData.Index.HasValue)
                 {
                     // Square from tower
-                    towerModel.RemoveAt(towerIndex.Value);
+                    towerModel.RemoveAt(dragData.Index.Value);
                     // messageService.Send("hole")
                 }
                 return;
             }
             
-            if (towerPresenter.IsHit(ed.position))
+            if (towerPresenter.IsHit(dragData.EventData.position))
             {
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    towerView.Container, ed.position, mainCamera, out var localPoint);
+                    towerView.Container, dragData.EventData.position, mainCamera, out var localPoint);
 
                 float targetX;
                 if (towerModel.Squares.Count == 0)
