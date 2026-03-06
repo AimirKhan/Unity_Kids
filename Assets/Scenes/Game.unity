@@ -359,6 +359,7 @@ MonoBehaviour:
   dragIconView: {fileID: 1025439366}
   towerView: {fileID: 5295484349051074961}
   holeView: {fileID: 1691896577817363639}
+  uiModule: {fileID: 507962766}
 --- !u!224 &185726983 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8840095989380917835, guid: 10e19772390b0af488699b6088824f14, type: 3}

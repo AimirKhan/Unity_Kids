@@ -81,7 +81,7 @@ namespace Game.GameSquare
         
         public void PlayDisappearAnim(Action onComplete)
         {
-            transform.DOScale(Vector3.zero, 0.3f)
+            transform.DOScale(Vector3.zero, 0.2f)
                 .SetEase(Ease.OutBack)
                 .OnComplete(() => onComplete?.Invoke());
         }

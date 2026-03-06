@@ -6,6 +6,7 @@ using Game.SquaresScroll;
 using Game.Tower;
 using Reflex.Attributes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace FSM.States
 {
@@ -20,11 +21,14 @@ namespace FSM.States
         [Inject]
         private readonly TowerPresenter towerPresenter;
         [Inject]
+        private readonly InputActionAsset inputActions;
+        [Inject]
         private readonly CancellationToken ct;
         
         public override void Enter()
         {
             Debug.Log("System: Initializing resources...");
+            inputActions.Disable();
             InitSequence().Forget();
         }
 

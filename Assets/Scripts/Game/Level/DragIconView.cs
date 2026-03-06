@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Reflex.Attributes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Game.Level
@@ -9,6 +10,8 @@ namespace Game.Level
     public class DragIconView : MonoBehaviour
     {
         [Inject] private Camera mainCamera;
+        [Inject]
+        private readonly InputActionAsset inputActions;
         
         [SerializeField] private Image image;
         
@@ -47,6 +50,7 @@ namespace Game.Level
 
         public async UniTask PlayAbsorbAnimation(RectTransform holeTarget)
         {
+            inputActions.Disable();
             var startColor = image.color;
             var sequence = DOTween.Sequence();
             sequence.Join(image.rectTransform.DOMove(holeTarget.position, 0.25f).SetEase(Ease.InBack));
@@ -57,6 +61,8 @@ namespace Game.Level
     
             gameObject.SetActive(false);
             image.color = startColor;
+            
+            inputActions.Enable();
         }
 
         public Vector2 GetSquareSize()

@@ -4,6 +4,7 @@ using Game.SquaresScroll;
 using Game.Tower;
 using Reflex.Core;
 using UnityEngine;
+using UnityEngine.InputSystem.UI;
 
 namespace Installers.Game
 {
@@ -14,6 +15,7 @@ namespace Installers.Game
         [SerializeField] private DragIconView dragIconView;
         [SerializeField] private TowerView towerView;
         [SerializeField] private HoleView holeView;
+        [SerializeField] private InputSystemUIInputModule uiModule;
         
         public void RegisterMonoObjects(ContainerBuilder builder)
         {
@@ -25,6 +27,9 @@ namespace Installers.Game
             
             builder.RegisterValue(towerView);
             builder.RegisterValue(holeView);
+            
+            // Register Input Action Map
+            builder.RegisterValue(uiModule.actionsAsset);
         }
     }
 }

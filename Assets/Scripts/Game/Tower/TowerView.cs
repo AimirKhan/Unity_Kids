@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using Game.GameSquare;
+using Reflex.Attributes;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Game.Tower
 {
     public class TowerView : MonoBehaviour
     {
+        [Inject]
+        private readonly InputActionAsset inputActions;
+        
         [SerializeField] private RectTransform container;
         [SerializeField] private SquareView squarePrefab;
         [SerializeField] private Vector2 towerRectOffset = Vector2.one * 50;
@@ -64,13 +69,14 @@ namespace Game.Tower
         
         public void RemoveAtAndShift(int index)
         {
+            inputActions.Disable();
             var squareToRemove = activeSquares[index];
             squareToRemove.PlayDisappearAnim(() =>
             {
                 activeSquares.RemoveAt(index);
                 Destroy(squareToRemove.gameObject); //TODO Need to replace
-
                 RebuildPositions();
+                inputActions.Enable();
             }); 
         }
 
@@ -81,8 +87,9 @@ namespace Game.Tower
                 var rect = activeSquares[i].GetRectTransform();
                 var rectOffset = (container.rect.position.y / 2) + GetSquareHeight() / 2;
                 var newY = i * GetSquareHeight() + rectOffset;
-                
-                rect.DOAnchorPosY(newY, .5f).SetEase(Ease.OutBounce);
+
+                rect.DOAnchorPosY(newY, .5f)
+                    .SetEase(Ease.OutBounce);
             }
         }
     }
