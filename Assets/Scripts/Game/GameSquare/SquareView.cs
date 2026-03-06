@@ -1,3 +1,5 @@
+using System;
+using DG.Tweening;
 using R3;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,6 +23,13 @@ namespace Game.GameSquare
         public void OnBeginDrag(PointerEventData eventData) => OnBeginDragStream.OnNext(eventData);
         public void OnDrag(PointerEventData eventData) => OnDragStream.OnNext(eventData);
         public void OnEndDrag(PointerEventData eventData) => OnEndDragStream.OnNext(eventData);
+
+        public void PlayDisappearAnim(Action onComplete)
+        {
+            transform.DOScale(Vector3.zero, 0.3f)
+                .SetEase(Ease.OutBack)
+                .OnComplete(() => onComplete?.Invoke());
+        }
         
         private void Dispose()
         {

@@ -59,8 +59,6 @@ namespace Game.Level
 
         private async UniTask HandleDrop(DragEventData dragData)
         {
-            var color = view.CurrentColor;
-            Debug.Log($"[DragIconPresenter]: HandleDrop: view.CurrentColor: {color} DragData color: {dragData.Color}");
             
             // 1. Hole check drop
             if (holePresenter.IsInside(dragData.EventData.position))
@@ -103,7 +101,7 @@ namespace Game.Level
                                            towerView.GetTopSquareRect().rect.width;
                         targetX = towerView.GetTopSquareRect().anchoredPosition.x + randomOffset;
                     }
-                    towerModel.TryAddCube(color, targetX);
+                    towerModel.TryAddCube(dragData.Color, targetX);
                     view.Deactivate(true);
                     // messageService.Send("hit");
                 }
@@ -112,28 +110,6 @@ namespace Game.Level
                     //Square from tower
                     view.Deactivate(false);
                 }
-                
-                // float targetX;
-                // if (towerModel.Squares.Count == 0)
-                // {
-                //     targetX = localPoint.x;
-                // }
-                // else
-                // {
-                //     var randomOffset = Random.Range(-0.25f, 0.25f) *
-                //                        towerView.GetTopSquareRect().rect.width;
-                //     targetX = towerView.GetTopSquareRect().anchoredPosition.x + randomOffset;
-                // }
-                //
-                // if (towerPresenter.IsScreenFull())
-                // {
-                //     // messageService.Send("limit");
-                //     view.Deactivate(false);
-                //     return;
-                // }
-                // towerModel.TryAddCube(color, targetX);
-                // view.Deactivate(true);
-                // // messageService.Send("hit");
             }
             else
             {

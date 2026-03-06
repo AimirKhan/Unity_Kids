@@ -62,10 +62,17 @@ namespace Game.Tower
         public void RemoveAtAndShift(int index)
         {
             var squareToRemove = activeSquares[index];
-            activeSquares.RemoveAt(index);
-            
-            Destroy(squareToRemove.gameObject); //TODO Need to replace
+            squareToRemove.PlayDisappearAnim(() =>
+            {
+                activeSquares.RemoveAt(index);
+                Destroy(squareToRemove.gameObject); //TODO Need to replace
 
+                RebuildPositions();
+            }); 
+        }
+
+        private void RebuildPositions()
+        {
             for (int i = 0; i < activeSquares.Count; i++)
             {
                 var rect = activeSquares[i].GetRectTransform();

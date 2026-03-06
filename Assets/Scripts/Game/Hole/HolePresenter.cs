@@ -22,7 +22,6 @@ namespace Game.Hole
             var isInside = (Mathf.Pow(localPoint.x, 2) / Mathf.Pow(a, 2)) +
                 (Mathf.Pow(localPoint.y, 2) / Mathf.Pow(b, 2)) <= 1;
             
-            if (isInside) Debug.Log("The square fell into the hole");
             return isInside;
         }
 
