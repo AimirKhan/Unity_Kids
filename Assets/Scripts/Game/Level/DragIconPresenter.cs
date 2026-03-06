@@ -6,7 +6,6 @@ using R3;
 using Reflex.Attributes;
 using Services;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 namespace Game.Level
@@ -41,13 +40,12 @@ namespace Game.Level
             this.towerPresenter = towerPresenter;
 
             dragService.OnBeginDrag.Subscribe(x =>
-                view.Activate(x.Color, x.EventData.position)).AddTo(ref bag);
+            {
+                view.Activate(x.Color, x.EventData.position);
+            }).AddTo(ref bag);
             
             dragService.OnDrag.Subscribe(x =>
                 view.MoveTo(x.EventData.position)).AddTo(ref bag);
-                
-            // dragService.OnEndDrag.Subscribe(x =>
-            //     HandleDrop(x.Item1, x.index).Forget()).AddTo(ref bag);
 
             dragService.OnEndDrag.SubscribeAwait(async (x, ct) =>
             {
@@ -78,7 +76,10 @@ namespace Game.Level
             if (towerPresenter.IsHit(dragData.EventData.position))
             {
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    towerView.Container, dragData.EventData.position, mainCamera, out var localPoint);
+                    towerView.Container,
+                    dragData.EventData.position,
+                    mainCamera,
+                    out var localPoint);
 
                 // Square from scroll panel
                 if (!dragData.Index.HasValue)

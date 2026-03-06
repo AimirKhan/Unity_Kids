@@ -9,14 +9,11 @@ namespace Game.SquaresScroll
     {
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private SquareView squarePrefab;
+        [SerializeField] private Image blockerImage;
         
         public SquareView SquarePrefab => squarePrefab;
-        
         public ScrollRect ScrollRect => scrollRect;
+        public Image BlockerImage => blockerImage;
         
-        void Start()
-        {
-            
-        }
     }
 }

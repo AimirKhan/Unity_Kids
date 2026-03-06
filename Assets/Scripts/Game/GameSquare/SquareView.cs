@@ -18,12 +18,67 @@ namespace Game.GameSquare
         public Image Image => image;
         public RectTransform GetRectTransform() => image.rectTransform;
         
-        public void Init(Color color) => image.color = color;
+        private ScrollRect scrollRect;
+        private bool isDragging;
         
-        public void OnBeginDrag(PointerEventData eventData) => OnBeginDragStream.OnNext(eventData);
-        public void OnDrag(PointerEventData eventData) => OnDragStream.OnNext(eventData);
-        public void OnEndDrag(PointerEventData eventData) => OnEndDragStream.OnNext(eventData);
+        public void Init(Color color, ScrollRect scroll = null)
+        {
+            image.color = color;
+            scrollRect = scroll;
+        }
 
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (scrollRect == null)
+            {
+                StartSquareDrag(eventData);
+                return;
+            }
+            
+            var deltaX = Mathf.Abs(eventData.delta.x);
+            var deltaY = Mathf.Abs(eventData.delta.y);
+
+            if (deltaY > deltaX)
+            {
+                StartSquareDrag(eventData);
+            }
+            else
+            {
+                isDragging = false;
+                scrollRect.OnBeginDrag(eventData);
+            }
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (isDragging)
+                OnDragStream.OnNext(eventData);
+            else if (scrollRect != null)
+                scrollRect.OnDrag(eventData);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (isDragging)
+            {
+                if (scrollRect != null)
+                    scrollRect.enabled = true;
+                OnEndDragStream.OnNext(eventData);
+                isDragging = false;
+            }
+            else if (scrollRect != null)
+            {
+                scrollRect.OnEndDrag(eventData);
+            }
+        }
+
+        private void StartSquareDrag(PointerEventData eventData)
+        {
+            isDragging = true;
+            if (scrollRect != null) scrollRect.enabled = false;
+            OnBeginDragStream.OnNext(eventData);
+        }
+        
         public void PlayDisappearAnim(Action onComplete)
         {
             transform.DOScale(Vector3.zero, 0.3f)

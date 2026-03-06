@@ -1,6 +1,7 @@
 using System;
 using R3;
 using Services;
+using UnityEngine.UI;
 
 namespace Game.GameSquare
 {
@@ -9,23 +10,34 @@ namespace Game.GameSquare
         private readonly SquareModel model;
         private readonly SquareView view;
         private readonly DragService dragService;
-        private readonly DisposableBag bag = new();
+        private readonly ScrollRect scrollRect;
+        private DisposableBag bag = new();
         
-        public SquarePresenter(SquareModel squareModel, SquareView squareView, DragService draggingService)
+        public SquarePresenter(SquareModel squareModel,
+            SquareView squareView,
+            DragService draggingService,
+            ScrollRect scrollRect)
         {
             model = squareModel;
             view = squareView;
             dragService = draggingService;
+            this.scrollRect = scrollRect;
             
-            squareView.Init(squareModel.Color);
+            squareView.Init(squareModel.Color, scrollRect);
             
-            squareView.OnBeginDragStream.Subscribe(eventData => draggingService.OnBeginDrag
-                .OnNext(new DragEventData
-                {
-                    Color = squareView.Image.color,
-                    EventData = eventData,
-                    Index = squareModel.Id
-                })).AddTo(ref bag);
+            squareView.OnBeginDragStream.Subscribe(eventData =>
+            {
+                if (squareModel.Id != -1)
+                    squareView.gameObject.SetActive(true);
+                
+                draggingService.OnBeginDrag
+                    .OnNext(new DragEventData
+                    {
+                        Color = squareView.Image.color,
+                        EventData = eventData,
+                        Index = squareModel.Id
+                    });
+            }).AddTo(ref bag);
             
             squareView.OnDragStream.Subscribe(eventData => draggingService.OnDrag
                 .OnNext(new DragEventData

@@ -1,22 +1,27 @@
+using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.GameSquare;
-using Game.Tower;
+using R3;
 using Reflex.Attributes;
 using Reflex.Core;
 using Services;
-using UnityEngine;
+using UnityEngine.EventSystems;
+using Utils;
+using Object = UnityEngine.Object;
 
 namespace Game.SquaresScroll
 {
-    public class SquaresScrollPresenter
+    public class SquaresScrollPresenter : IDisposable
     {
-        [Inject] GameSquaresSO gameSquaresSO;
+        [Inject]
+        private GameSquaresSO gameSquaresSO;
         private readonly Container container;
         private readonly SquaresScrollModel model;
         private readonly SquaresScrollView view;
+        private DisposableBag bag = new();
+        
         private readonly List<SquarePresenter> activeSquarePresenters = new();
         
         public SquaresScrollPresenter(Container container, SquaresScrollModel model, SquaresScrollView view)
@@ -42,10 +47,13 @@ namespace Game.SquaresScroll
                 var squareModel = new SquareModel(squareData);
                 
                 var squarePresenter = new SquarePresenter(squareModel, squareView,
-                    container.Resolve<DragService>());
+                    container.Resolve<DragService>(), view.ScrollRect);
 
                 activeSquarePresenters.Add(squarePresenter);
             }
+            view.BlockerImage.transform.SetAsLastSibling();
         }
+        
+        public void Dispose() => bag.Dispose();
     }
 }
